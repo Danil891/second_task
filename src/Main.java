@@ -4,7 +4,8 @@ public class Main {
         boolean ilogic = start.getIlogic();
         boolean rlogic = start.getRlogic();
         boolean vlogic = start.getVlogic();
-
+        String word = start.getWord();
+        String file = start.getFilename();
     }
 
 
