@@ -20,6 +20,7 @@ public class Grep {
         this.word = word;
         this.file = file;
     }
+
     public void bot() throws IOException {
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int counter = 0;
@@ -32,10 +33,36 @@ public class Grep {
             counter++;
         }
     }
+
     public void rBot() throws IOException {
-
-
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        int counter = 0;
+        for (String line : Files.readAllLines(Paths.get("/checkFile"))) {
+            array = line.split(" ");
+            for (String element : array) {
+                if (element.matches(word)) temp.add(counter);
+            }
+            counter++;
+        }
     }
+
+    public void vBot() throws IOException {
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        int counter = 0;
+        for (String line : Files.readAllLines(Paths.get("/checkFile"))) {
+            array = line.split(" ");
+            if (!line.contains(word)) temp.add(counter);
+            counter++;
+        }
+    }
+
+    public void iBot() throws IOException {
+        ArrayList<String> iArray = new ArrayList<String>();
+        for (String line : Files.readAllLines(Paths.get("/checkFile"))){
+            iArray.add(line.toLowerCase());
+        }
+    }
+
 
 
 }
