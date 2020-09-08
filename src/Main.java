@@ -6,6 +6,8 @@ public class Main {
         boolean vlogic = start.getVlogic();
         String word = start.getWord();
         String file = start.getFilename();
+        Grep grep = new Grep(ilogic, rlogic, vlogic, word, file);
+        grep.bot();
     }
 
 
