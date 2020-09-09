@@ -16,7 +16,7 @@ public class Grep {
     private String file;
     private String[] array;
 
-    public Grep(boolean ilogic, boolean vlogic, boolean rlogic, String word, String file){
+    public Grep (boolean ilogic, boolean vlogic, boolean rlogic, String word, String file){
         this.ilogic = ilogic;
         this.rlogic = rlogic;
         this.vlogic = vlogic;
@@ -32,7 +32,7 @@ public class Grep {
             ss = bot();
         }
         if (!ilogic && !vlogic && rlogic) {
-            ss =rBot();
+            ss = rBot();
         }
         if (!ilogic && vlogic && !rlogic) {
             ss = vBot();
@@ -42,6 +42,9 @@ public class Grep {
         }
         if (ilogic && !vlogic && !rlogic) {
             ss = iBot();
+        }
+        if (ilogic && vlogic && !rlogic) {
+            ss = ivBot();
         }
         return ss;
     }
@@ -61,9 +64,7 @@ public class Grep {
         for (String line : Files.readAllLines(Paths.get("checkFile.txt"))){
             array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"]");
             for (String element: array){
-                //System.out.println(word);
                 if (element.equals( word )) temp.add(counter);
-
             }
             counter++;
         }
@@ -88,32 +89,32 @@ public class Grep {
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int counter = 0;
         for (String line : Files.readAllLines(Paths.get("checkFile.txt"))) {
-            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"\\']");
+            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"]");
             if (!line.contains(word)) temp.add(counter);
             counter++;
         }
         return sOut(temp);
     }
 
-    public ArrayList<String>  vrBot() throws IOException {
+    public ArrayList<String> vrBot() throws IOException {
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int counter = 0;
         for (String line : Files.readAllLines(Paths.get("checkFile.txt"))) {
-            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"\\']");
-            for (String element : array) {
-                if (!element.matches(word)) temp.add(counter);
+            Pattern pattern = Pattern.compile(word);
+            Matcher match = pattern.matcher(line);
+            if (!match.find()){
+                temp.add(counter);
             }
             counter++;
         }
         return sOut(temp);
-
     }
 
-    public ArrayList<String>  iBot() throws IOException {
+    public ArrayList<String> iBot() throws IOException {
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int counter = 0;
         for (String line : Files.readAllLines(Paths.get("checkFile.txt"))){
-            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"\\']");
+            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"]");
             for (int i = 0; i < array.length; i++) array[i] = array[i].toLowerCase();
             for (String element: array){
                 if (element.equals( word.toLowerCase() )) temp.add(counter);
@@ -122,4 +123,19 @@ public class Grep {
         }
         return sOut(temp);
     }
+
+    public ArrayList<String> ivBot() throws IOException{
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        int counter = 0;
+        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))){
+            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"]");
+            for (String element: array){
+                if (!element.toLowerCase().contains( word.toLowerCase())) temp.add(counter);
+            }
+            counter++;
+        }
+        return sOut(temp);
+    }
+
 }
+
