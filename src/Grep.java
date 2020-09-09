@@ -21,26 +21,34 @@ public class Grep {
         this.file = file;
     }
 
-    public void start() throws IOException {
-        if (!ilogic && !vlogic && !rlogic ) {
-            bot();
+    public ArrayList<String> start() throws IOException {
+        ArrayList<String> ss = new ArrayList<String>();
+
+/*
+        if (ilogic && vlogic && rlogic ) {
+            ss= bot();
         }
-        if (!ilogic && !vlogic && rlogic) {
-            rBot();
+        if (ilogic && vlogic && rlogic) {
+            ss=rBot();
         }
-        if (!ilogic && vlogic && !rlogic) {
-            vBot();
+        if (ilogic && vlogic && !rlogic) {
+            ss = vBot();
         }
-        if (!ilogic && vlogic && rlogic) {
-            vrBot();
+        if (ilogic && vlogic && rlogic) {
+            ss = vrBot();
         }
-        if (ilogic && !vlogic && !rlogic) {
-            iBot();
+        if (ilogic && vlogic && rlogic) {
+            ss = iBot();
         }
+
+
+ */
+        ss = bot();
+        return ss;
     }
 
     public ArrayList<String>  sOut(ArrayList<Integer> temp) throws IOException {
-        ArrayList<String> strings = new ArrayList<>(Files.readAllLines(get("/checkFile")));
+        ArrayList<String> strings = new ArrayList<>(Files.readAllLines(get("checkFile.txt")));
         for (int i = 0 ; i < strings.size(); i++){
             if (!temp.contains(i)) strings.remove(i);
         }
@@ -50,7 +58,7 @@ public class Grep {
     public ArrayList<String>  bot() throws IOException {
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("/checkFile"))){
+        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))){
             array = line.split( " ");
             for (String element: array){
                 if (element.equals( word )) temp.add(counter);
@@ -63,7 +71,7 @@ public class Grep {
     public ArrayList<String>  rBot() throws IOException {
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("/checkFile"))) {
+        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))) {
             array = line.split(" ");
             for (String element : array) {
                 if (element.matches(word)) temp.add(counter);
@@ -76,7 +84,7 @@ public class Grep {
     public ArrayList<String>  vBot() throws IOException {
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("/checkFile"))) {
+        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))) {
             array = line.split(" ");
             if (!line.contains(word)) temp.add(counter);
             counter++;
@@ -87,7 +95,7 @@ public class Grep {
     public ArrayList<String>  vrBot() throws IOException {
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("/checkFile"))) {
+        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))) {
             array = line.split(" ");
             for (String element : array) {
                 if (!element.matches(word)) temp.add(counter);
@@ -100,7 +108,7 @@ public class Grep {
     public ArrayList<String>  iBot() throws IOException {
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("/checkFile"))){
+        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))){
             array = line.split( " ");
             for (int i = 0; i < array.length; i++) array[i] = array[i].toLowerCase();
             for (String element: array){
@@ -110,5 +118,7 @@ public class Grep {
         }
         return sOut(temp);
     }
+
+
 
 }

@@ -1,4 +1,10 @@
+import java.nio.file.Files;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.nio.file.Paths;
+
+import static java.nio.file.Paths.get;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -10,7 +16,11 @@ public class Main {
         String file = start.getFilename();
         Grep grep = new Grep(ilogic, rlogic, vlogic, word, file);
         grep.start() ;
-    }
 
+
+
+        ArrayList<String> ss = grep.start() ;
+            System.out.println(ss);
+    }
 
 }
