@@ -10,7 +10,7 @@ public class GrepCount {
         this.args = args;
         int index;
 
-        for (index = 0; index < args.length; index++){
+        for (index = 0; index < args.length - 1; index++){
             switch (args[index]){
                 case "-i":
                     ilogic = true;
