@@ -1,53 +1,51 @@
+import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+
+
 public class GrepCount {
-    private String[] args;
-    private boolean ilogic = false;
-    private boolean vlogic = false;
-    private boolean rlogic = false;
+    @Option(name = "-v", metaVar = "все кроме")
+    private boolean vlogic;
+
+    @Option(name = "-r", metaVar = "все по шаблону")
+    private boolean rlogic;
+
+    @Option(name = "-i", metaVar = "без регистра")
+    private boolean ilogic;
+
+    @Argument(required = true, metaVar = "слово")
     private String word;
+
+    @Argument(required = true, metaVar = "имя файла")
     private String filename;
 
-    public GrepCount(String[] args) {
-        this.args = args;
-        int index;
 
-        for (index = 0; index < args.length - 1; index++){
-            switch (args[index]){
-                case "-i":
-                    ilogic = true;
-                    break;
-                case "-v":
-                    vlogic = true;
-                    break;
-                case "-r":
-                    rlogic = true;
-                    break;
-                default:
-                    word = args[index];
-                    break;
-            }
+
+
+    /*public GrepCount() {
+
+    }
+*/
+    public static void main(String[] args) { new GrepCount().launch(args);
+    }
+    private void launch(String[] args) {
+        CmdLineParser parser = new CmdLineParser(this);
+
+        try {
+            parser.parseArgument(args);
+        } catch (CmdLineException e) {
+            System.err.println(e.getMessage());
+            System.err.println("You are mistaken\n " +
+                    "Use only -v, -i, -r");
+            parser.printUsage(System.err);
+            System.exit(-2);
         }
-        filename = args[args.length - 1];
 
+        Grep grep = new Grep(ilogic, rlogic, vlogic);
+
+        grep.sOutResult(grep.grepBot(word, filename));
     }
 
-    public boolean getIlogic() {
-        return ilogic;
-    }
-
-    public boolean getRlogic() {
-        return rlogic;
-    }
-
-    public boolean getVlogic() {
-        return vlogic;
-    }
-
-    public String getWord() {
-        return word;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
 }
  

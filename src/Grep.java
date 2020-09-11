@@ -2,140 +2,47 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static java.nio.file.Paths.get;
 
 public class Grep {
     private boolean ilogic;
     private boolean vlogic;
     private boolean rlogic;
-    private String word;
-    private String file;
-    private String[] array;
 
-    public Grep (boolean ilogic, boolean vlogic, boolean rlogic, String word, String file){
+    public Grep (boolean ilogic, boolean vlogic, boolean rlogic){
         this.ilogic = ilogic;
         this.rlogic = rlogic;
         this.vlogic = vlogic;
-        this.word = word;
-        this.file = file;
     }
 
-    public ArrayList<String> start() throws IOException {
+    public ArrayList<String> grepBot(String word, String file) {
+        ArrayList<String> strings = new ArrayList<>();
+        String regex = word;
+            Pattern ignIsSelected;
+            if (!rlogic) regex = Pattern.quote(word);
 
-        ArrayList<String> ss = new ArrayList<String>();
+            if (ilogic) ignIsSelected = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 
-        if (!ilogic && !vlogic && !rlogic ) {
-            ss = bot();
-        }
-        if (!ilogic && !vlogic && rlogic) {
-            ss = rBot();
-        }
-        if (!ilogic && vlogic && !rlogic) {
-            ss = vBot();
-        }
-        if (!ilogic && vlogic && rlogic) {
-            ss = vrBot();
-        }
-        if (ilogic && !vlogic && !rlogic) {
-            ss = iBot();
-        }
-        if (ilogic && vlogic && !rlogic) {
-            ss = ivBot();
-        }
-        return ss;
-    }
+            else ignIsSelected = Pattern.compile(regex);
 
-    public ArrayList<String>  sOut(ArrayList<Integer> temp) throws IOException {
-        ArrayList<String> strings = new ArrayList<>(Files.readAllLines(get("checkFile.txt")));
-        ArrayList<String> cOut = new ArrayList<String>();
-        for (int i = 0 ; i < strings.size(); i++){
-            if (temp.contains(i)) cOut.add(strings.get(i));
-        }
-        return cOut;
-    }
-
-    public ArrayList<String>  bot() throws IOException {
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-        int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))){
-            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"]");
-            for (String element: array){
-                if (element.equals( word )) temp.add(counter);
+            try (BufferedReader reader = Files.newBufferedReader(Paths.get(file))) {
+                Matcher matcher;
+                String currentLine;
+                while ((currentLine = reader.readLine()) != null) {
+                    matcher = ignIsSelected.matcher(currentLine);
+                    if (matcher.find() != vlogic) strings.add(currentLine);
+                }
             }
-            counter++;
-        }
-        return sOut(temp);
-    }
-
-    public ArrayList<String>  rBot() throws IOException {
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-        int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))) {
-            Pattern pattern = Pattern.compile(word);
-            Matcher match = pattern.matcher(line);
-            while (match.find()){
-                temp.add(counter);
+            catch (IOException e) {
+                e.printStackTrace();
             }
-            counter++;
+            return strings;
         }
-        return sOut(temp);
-    }
-
-    public ArrayList<String>  vBot() throws IOException {
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-        int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))) {
-            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"]");
-            if (!line.contains(word)) temp.add(counter);
-            counter++;
+    public void sOutResult(ArrayList<String> result) {
+        for (String string : result) {
+            System.out.println(string);
         }
-        return sOut(temp);
     }
-
-    public ArrayList<String> vrBot() throws IOException {
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-        int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))) {
-            Pattern pattern = Pattern.compile(word);
-            Matcher match = pattern.matcher(line);
-            if (!match.find()){
-                temp.add(counter);
-            }
-            counter++;
-        }
-        return sOut(temp);
-    }
-
-    public ArrayList<String> iBot() throws IOException {
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-        int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))){
-            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"]");
-            for (int i = 0; i < array.length; i++) array[i] = array[i].toLowerCase();
-            for (String element: array){
-                if (element.equals( word.toLowerCase() )) temp.add(counter);
-            }
-            counter++;
-        }
-        return sOut(temp);
-    }
-
-    public ArrayList<String> ivBot() throws IOException{
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-        int counter = 0;
-        for (String line : Files.readAllLines(Paths.get("checkFile.txt"))){
-            array = line.split( "[\" \"\\,\\&\\.\\-\\;\\:\"...\"]");
-            for (String element: array){
-                if (!element.toLowerCase().contains( word.toLowerCase())) temp.add(counter);
-            }
-            counter++;
-        }
-        return sOut(temp);
-    }
-
 }
 
