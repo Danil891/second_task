@@ -21,12 +21,6 @@ public class GrepCount {
     private String filename;
 
 
-
-
-    /*public GrepCount() {
-
-    }
-*/
     public static void main(String[] args) { new GrepCount().launch(args);
     }
     private void launch(String[] args) {
